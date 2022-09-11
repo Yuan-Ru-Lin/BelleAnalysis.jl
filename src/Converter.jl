@@ -1,8 +1,9 @@
 module Converter
 
-using UnROOT
+using UnROOT: CustomROOTStruct
+import UnROOT: readtype
 
-struct TrackFitResult <: UnROOT.CustomROOTStruct
+struct TrackFitResult <: CustomROOTStruct
     d0::Float32
     phi0::Float32
     omega::Float32
@@ -10,15 +11,13 @@ struct TrackFitResult <: UnROOT.CustomROOTStruct
     tanlambda::Float32
 end
 
-function UnROOT.readtype(io::IO, T::Type{TrackFitResult})
+function readtype(io::IO, T::Type{TrackFitResult})
     T(readtype(io, Float32), readtype(io, Float32), readtype(io, Float32), readtype(io, Float32), readtype(io, Float32))
 end
 
-"""
-function UnROOT.interped_data(rawdata, rawoffsets, ::Type{Vector{TrackFitResult}}, ::Type{J}) where {T, J <: UnROOT.JaggType}
-    UnROOT.splitup(rawdata, rawoffsets, TrackFitResult)
+function Base.show(io::IO, x::TrackFitResult)
+    print(io, "(d₀ = $(x.d0), ϕ₀ = $(x.phi0), ω = $(x.omega), z₀ = $(x.z0), tanλ = $(x.tanlambda))")
 end
-"""
 
 export TrackFitResult
 
